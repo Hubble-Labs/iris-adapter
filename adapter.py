@@ -2,21 +2,24 @@ from bridge import Bridge
 
 
 class Adapter:
-    #google earth engine
     base_url = 'https://min-api.cryptocompare.com/data/price'
     from_params = ['base', 'from', 'coin']
     to_params = ['quote', 'to', 'market']
 
     def __init__(self, input):
         self.id = input.get('id', '1')
+        #input data to external adapter to customize api request
         self.request_data = input.get('data')
         if self.validate_request_data():
+            #bridge
             self.bridge = Bridge()
             self.set_params()
             self.create_request()
         else:
+            #send error if request data is not valid
             self.result_error('No data provided')
 
+    #makes sure request data is in correct format
     def validate_request_data(self):
         if self.request_data is None:
             return False
@@ -24,6 +27,7 @@ class Adapter:
             return False
         return True
 
+    #take input request data and structure parameters used in api request
     def set_params(self):
         for param in self.from_params:
             self.from_param = self.request_data.get(param)
@@ -34,12 +38,14 @@ class Adapter:
             if self.to_param is not None:
                 break
 
+    #takes data with parameters set and turns it into a request for the api
     def create_request(self):
         try:
             params = {
                 'fsym': self.from_param,
                 'tsyms': self.to_param,
             }
+            #get response and parse it
             response = self.bridge.request(self.base_url, params)
             data = response.json()
             self.result = data[self.to_param]
