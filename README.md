@@ -8,12 +8,15 @@ Iris External Adapter to compare images using SIFT.
 
 ```
 python3 -m venv env
+source env/bin/activate
 ```
 
-## Clone
+## Clone and install requirements
 
 ```
 git clone git@github.com:Hubble-Labs/iris-adapter.git
+cd iris-adapter
+pip install -r requirements.txt
 ```
 
 ## Run with Docker

@@ -1,5 +1,12 @@
 from bridge import Bridge
 
+import base64
+from PIL import Image
+
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+        return encoded_string.decode('utf-8')
 
 class Adapter:
     base_url = 'https://min-api.cryptocompare.com/data/price'
@@ -50,7 +57,15 @@ class Adapter:
             data = response.json()
             self.result = data[self.to_param]
             data['result'] = self.result
-            self.result_success(data)
+
+            # --- TEST --- #
+
+            image_path = "test1.jpg"
+            encoded_string = encode_image(image_path)
+            self.result_success(encoded_string)
+
+            # --- END TEST --- #
+
         except Exception as e:
             self.result_error(e)
         finally:
